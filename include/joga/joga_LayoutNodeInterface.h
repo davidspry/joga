@@ -186,12 +186,12 @@ public:
     return *m_this;
   }
 
-  auto withHorizontalGap(const float componentSpacing) -> Node& {
+  auto withColumnGap(const float componentSpacing) -> Node& {
     YGNodeStyleSetGap(m_this, YGGutterColumn, componentSpacing);
     return *m_this;
   }
 
-  auto withVerticalGap(const float componentSpacing) -> Node& {
+  auto withRowGap(const float componentSpacing) -> Node& {
     YGNodeStyleSetGap(m_this, YGGutterRow, componentSpacing);
     return *m_this;
   }
