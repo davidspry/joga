@@ -16,7 +16,7 @@ namespace joga::impl
 {
 
 template<YGFlexDirection FLEX_DIRECTION, YGJustify JUSTIFY_CONTENT>
-struct LayoutSpecification final {
+struct LayoutSpec final {
   template<class... T> requires (std::derived_from<T, LayoutNode> && ...)
   class Layout final: public LayoutNode,
                       public LayoutNodeInterface<Layout<T...>> {
@@ -70,14 +70,14 @@ struct LayoutSpecification final {
 
 namespace joga
 {
-using HStack        = impl::LayoutSpecification<YGFlexDirectionRow,    YGJustifyFlexStart>;
-using VStack        = impl::LayoutSpecification<YGFlexDirectionColumn, YGJustifyFlexStart>;
-using HStackCentre  = impl::LayoutSpecification<YGFlexDirectionRow,    YGJustifyCenter>;
-using VStackCentre  = impl::LayoutSpecification<YGFlexDirectionColumn, YGJustifyCenter>;
-using HSpaceAround  = impl::LayoutSpecification<YGFlexDirectionRow,    YGJustifySpaceAround>;
-using VSpaceAround  = impl::LayoutSpecification<YGFlexDirectionColumn, YGJustifySpaceAround>;
-using HSpaceBetween = impl::LayoutSpecification<YGFlexDirectionRow,    YGJustifySpaceBetween>;
-using VSpaceBetween = impl::LayoutSpecification<YGFlexDirectionColumn, YGJustifySpaceBetween>;
-using HSpaceEvenly  = impl::LayoutSpecification<YGFlexDirectionRow,    YGJustifySpaceEvenly>;
-using VSpaceEvenly  = impl::LayoutSpecification<YGFlexDirectionColumn, YGJustifySpaceEvenly>;
+using HStack        = impl::LayoutSpec<YGFlexDirectionRow,    YGJustifyFlexStart>;
+using VStack        = impl::LayoutSpec<YGFlexDirectionColumn, YGJustifyFlexStart>;
+using HStackCentre  = impl::LayoutSpec<YGFlexDirectionRow,    YGJustifyCenter>;
+using VStackCentre  = impl::LayoutSpec<YGFlexDirectionColumn, YGJustifyCenter>;
+using HSpaceAround  = impl::LayoutSpec<YGFlexDirectionRow,    YGJustifySpaceAround>;
+using VSpaceAround  = impl::LayoutSpec<YGFlexDirectionColumn, YGJustifySpaceAround>;
+using HSpaceBetween = impl::LayoutSpec<YGFlexDirectionRow,    YGJustifySpaceBetween>;
+using VSpaceBetween = impl::LayoutSpec<YGFlexDirectionColumn, YGJustifySpaceBetween>;
+using HSpaceEvenly  = impl::LayoutSpec<YGFlexDirectionRow,    YGJustifySpaceEvenly>;
+using VSpaceEvenly  = impl::LayoutSpec<YGFlexDirectionColumn, YGJustifySpaceEvenly>;
 }
