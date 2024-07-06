@@ -20,17 +20,17 @@ struct LayoutSpec final {
   template<class... T> requires (std::derived_from<T, LayoutNode> && ...)
   class Layout final: public LayoutNode,
                       public LayoutNodeInterface<Layout<T...>> {
-    std::tuple<const T&...> m_nodes;
+    std::tuple<T&...> m_nodes;
     std::array<YGNodeRef, sizeof...(T)> m_nodes_ref;
 
   public:
     //⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
-    explicit Layout(const T&... nodes): m_nodes(nodes...) {
+    explicit Layout(T&... nodes): m_nodes(std::tie(nodes...)) {
       YGNodeStyleSetFlexDirection(this, FLEX_DIRECTION);
       YGNodeStyleSetJustifyContent(this, JUSTIFY_CONTENT);
 
       [this]<std::size_t... i>(const std::index_sequence<i...>) {
-        ((m_nodes_ref[i] = &const_cast<T&>(std::get<i>(m_nodes))), ...);
+        ((m_nodes_ref[i] = &std::get<i>(m_nodes)), ...);
       }(std::make_index_sequence<sizeof...(T)>());
 
       YGNodeSetChildren(this, m_nodes_ref.data(), m_nodes_ref.size());
@@ -55,7 +55,7 @@ struct LayoutSpec final {
         ([&, parentOffsetX, parentOffsetY] {
           const auto deltaX = parentOffsetX + YGNodeLayoutGetLeft(this);
           const auto deltaY = parentOffsetY + YGNodeLayoutGetTop(this);
-          const_cast<T&>(components).didUpdateLayout(deltaX, deltaY);
+          components.didUpdateLayout(deltaX, deltaY);
         }(), ...);
       }, m_nodes);
     }
