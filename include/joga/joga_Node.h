@@ -20,8 +20,11 @@ class Node final: public impl::LayoutNode,
 
 public:
   explicit Node(juce::Component& component): m_component(component) {
-    if (const auto bounds = component.getBounds(); !bounds.isEmpty()) {
-      this->withBounds(bounds);
+    if (const auto bounds = component.getBounds().toFloat(); !bounds.isEmpty()) {
+      YGNodeStyleSetPosition(this, YGEdgeLeft, bounds.getX());
+      YGNodeStyleSetPosition(this, YGEdgeTop, bounds.getY());
+      YGNodeStyleSetWidth(this, bounds.getWidth());
+      YGNodeStyleSetHeight(this, bounds.getHeight());
     }
   }
 

@@ -20,20 +20,38 @@ struct LayoutSpec final {
   template<class... T> requires (std::derived_from<T, LayoutNode> && ...)
   class Layout final: public LayoutNode,
                       public LayoutNodeInterface<Layout<T...>> {
-    std::tuple<T&...> m_nodes;
-    std::array<YGNodeRef, sizeof...(T)> m_nodes_ref;
+    std::tuple<T...> m_nodes;
 
   public:
     //⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
-    explicit Layout(T&... nodes): m_nodes(std::tie(nodes...)) {
-      YGNodeStyleSetFlexDirection(this, FLEX_DIRECTION);
-      YGNodeStyleSetJustifyContent(this, JUSTIFY_CONTENT);
-
-      [this]<std::size_t... i>(const std::index_sequence<i...>) {
-        ((m_nodes_ref[i] = &std::get<i>(m_nodes)), ...);
+    explicit Layout(T&&... nodes): m_nodes(std::move(nodes)...) {
+      auto children = [this]<std::size_t... i>(std::index_sequence<i...>) {
+        return std::array<YGNodeRef, sizeof...(T)>{&std::get<i>(m_nodes)...};
       }(std::make_index_sequence<sizeof...(T)>());
 
-      YGNodeSetChildren(this, m_nodes_ref.data(), m_nodes_ref.size());
+      YGNodeStyleSetFlexDirection(this, FLEX_DIRECTION);
+      YGNodeStyleSetJustifyContent(this, JUSTIFY_CONTENT);
+      YGNodeSetChildren(this, children.data(), children.size());
+    }
+
+    Layout(const Layout& layout): m_nodes(layout.m_nodes) {
+      auto children = [this]<std::size_t... i>(std::index_sequence<i...>) {
+        return std::array<YGNodeRef, sizeof...(T)>{&std::get<i>(m_nodes)...};
+      }(std::make_index_sequence<sizeof...(T)>());
+
+      YGNodeStyleSetFlexDirection(this, FLEX_DIRECTION);
+      YGNodeStyleSetJustifyContent(this, JUSTIFY_CONTENT);
+      YGNodeSetChildren(this, children.data(), children.size());
+    }
+
+    Layout(Layout&& layout) noexcept: m_nodes(std::move(layout.m_nodes)) {
+      auto children = [this]<std::size_t... i>(std::index_sequence<i...>) {
+        return std::array<YGNodeRef, sizeof...(T)>{&std::get<i>(m_nodes)...};
+      }(std::make_index_sequence<sizeof...(T)>());
+
+      YGNodeStyleSetFlexDirection(this, FLEX_DIRECTION);
+      YGNodeStyleSetJustifyContent(this, JUSTIFY_CONTENT);
+      YGNodeSetChildren(this, children.data(), children.size());
     }
 
     //⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
