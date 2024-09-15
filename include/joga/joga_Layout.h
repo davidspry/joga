@@ -39,8 +39,7 @@ struct LayoutSpec final {
         return std::array<YGNodeRef, sizeof...(T)>{&std::get<i>(m_nodes)...};
       }(std::make_index_sequence<sizeof...(T)>());
 
-      YGNodeStyleSetFlexDirection(this, FLEX_DIRECTION);
-      YGNodeStyleSetJustifyContent(this, JUSTIFY_CONTENT);
+      YGNodeCopyStyle(this, &layout);
       YGNodeSetChildren(this, children.data(), children.size());
     }
 
@@ -49,8 +48,7 @@ struct LayoutSpec final {
         return std::array<YGNodeRef, sizeof...(T)>{&std::get<i>(m_nodes)...};
       }(std::make_index_sequence<sizeof...(T)>());
 
-      YGNodeStyleSetFlexDirection(this, FLEX_DIRECTION);
-      YGNodeStyleSetJustifyContent(this, JUSTIFY_CONTENT);
+      YGNodeCopyStyle(this, &layout);
       YGNodeSetChildren(this, children.data(), children.size());
     }
 
