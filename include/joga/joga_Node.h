@@ -19,14 +19,7 @@ class Node final: public impl::LayoutNode,
   juce::Component& m_component;
 
 public:
-  explicit Node(juce::Component& component): m_component(component) {
-    if (const auto bounds = component.getBounds().toFloat(); !bounds.isEmpty()) {
-      YGNodeStyleSetPosition(this, YGEdgeLeft, bounds.getX());
-      YGNodeStyleSetPosition(this, YGEdgeTop, bounds.getY());
-      YGNodeStyleSetWidth(this, bounds.getWidth());
-      YGNodeStyleSetHeight(this, bounds.getHeight());
-    }
-  }
+  explicit Node(juce::Component& component): m_component(component) {}
 
   /// @brief Notify the node that its layout has been updated.
   /// @param parentOffsetX The x-offset of the node's parent within the layout.
