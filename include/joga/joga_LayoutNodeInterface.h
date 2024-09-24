@@ -13,7 +13,6 @@ namespace joga::impl
 {
 
 struct LayoutNode: facebook::yoga::Node {
-  virtual ~LayoutNode() = default;
   virtual void didUpdateLayout(float, float) = 0;
 };
 
