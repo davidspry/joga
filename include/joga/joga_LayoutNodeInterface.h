@@ -28,6 +28,13 @@ public:
   }
 
   //⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+  auto withSize(const juce::Rectangle<int>& newSize) && -> Node&& {
+    const auto size = newSize.toFloat();
+    YGNodeStyleSetWidth(m_this, size.getWidth());
+    YGNodeStyleSetHeight(m_this, size.getHeight());
+    return std::move(*m_this);
+  }
+
   auto withBounds(const juce::Rectangle<int>& newBounds) && -> Node&& {
     const auto bounds = newBounds.toFloat();
     YGNodeStyleSetPosition(m_this, YGEdgeLeft, bounds.getX());
