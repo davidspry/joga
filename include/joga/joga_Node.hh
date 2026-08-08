@@ -17,7 +17,9 @@ class Node: public joga::impl::LayoutNode
 
 public:
     Node(juce::Component& component)
-        : m_component(component) {}
+        : m_component(component)
+    {
+    }
 
     template<class Self>
     Self&& applyingPositionOnly(this Self&& self)
