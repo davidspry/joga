@@ -32,32 +32,22 @@ struct LayoutNode: protected facebook::yoga::Node
         return std::forward<Self>(self);
     }
 
-    template<class Self>
-    Self&& withSize(this Self&& self, const juce::Rectangle<float>& size)
-    {
-        YGNodeStyleSetWidth(std::addressof(self), size.getWidth());
-        YGNodeStyleSetHeight(std::addressof(self), size.getHeight());
-        return std::forward<Self>(self);
-    }
-
     template<class Self, class T>
     Self&& withSize(this Self&& self, const juce::Rectangle<T>& size)
     {
-        return std::forward<Self>(self).withSize(size.toFloat());
-    }
-
-    template<class Self>
-    Self&& withBounds(this Self&& self, const juce::Rectangle<float>& bounds)
-    {
-        YGNodeStyleSetPosition(std::addressof(self), YGEdgeLeft, bounds.getX());
-        YGNodeStyleSetPosition(std::addressof(self), YGEdgeTop, bounds.getY());
-        return std::forward<Self>(self).withSize(bounds);
+        juce::Rectangle rect = size.toFloat();
+        YGNodeStyleSetWidth(std::addressof(self), rect.getWidth());
+        YGNodeStyleSetHeight(std::addressof(self), rect.getHeight());
+        return std::forward<Self>(self);
     }
 
     template<class Self, class T>
     Self&& withBounds(this Self&& self, const juce::Rectangle<T>& bounds)
     {
-        return std::forward<Self>(self).withBounds(bounds.toFloat());
+        juce::Rectangle rect = bounds.toFloat();
+        YGNodeStyleSetPosition(std::addressof(self), YGEdgeLeft, rect.getX());
+        YGNodeStyleSetPosition(std::addressof(self), YGEdgeTop, rect.getY());
+        return std::forward<Self>(self).withSize(rect);
     }
 
     template<class Self>
